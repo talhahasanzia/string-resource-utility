@@ -18,13 +18,18 @@ type record struct {
 
 func main() {
 
-	csvFile := flag.String("file", "csv", "csv file name with path")
+	csvFile := flag.String("file", "", "csv file name with path")
 
 	platform := flag.String("platform", "", "target platform: ios/android/web")
 
 	debugFlag := flag.Bool("debug", false, "enable detailed logs for debugging: true/false")
 
 	flag.Parse()
+
+	if *csvFile == "" {
+		fmt.Println("Invalid input for file name/path.")
+		return
+	}
 
 	fmt.Println("Reading from file:", *csvFile)
 
