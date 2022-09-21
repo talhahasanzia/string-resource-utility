@@ -32,19 +32,6 @@ func main() {
 
 	channelMap := make(map[string]chan Record)
 
-	// defer func() {
-	// 	// All data sent, setting post text flag to complete the platform specific file formatting
-
-	// 	for i, locale := range data[0] {
-	// 		if i == 0 {
-	// 			continue
-	// 		}
-	// 		// Send empty record to close file with end texts
-	// 		channelMap[locale] <- Record{}
-	// 	}
-
-	// }()
-
 	for i, locale := range data[0] {
 		if i == 0 {
 			continue
