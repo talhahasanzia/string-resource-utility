@@ -46,7 +46,7 @@ Similarly, if you chose `-platfrom=ios`, the generated files will be `Localized.
 "bye_text" = "goodbye";
 ```
 
-### Typescript
+### Web
 And finally, if you chose `-platfrom=web` (assuming you are working on a typescript framework), the generated files will be `strings.ts`, since we are targeting multiple locales, this tool will generate `strings_en.ts` for `en` locale, and so on. Here is what this generated file looks like when above mentioned csv is used:
 ```
 const LOCALIZED_STRINGS = {
