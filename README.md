@@ -73,5 +73,9 @@ You can always customize the way this tool work, following are the files where y
 - Since channel instance is locale specific and goroutine is also locale specifice, an entry sent to `en` channel will be received by a goroutine that was started for `en` writing, since goroutine is receiving on this channel, entry is written.
 - In the end, when loop is completing, `CloseFile` calls are made which writes closing statement (if needed by platform) to platform + locale specific file.
 
+## Releases
+Find releases for your specific platforms in [releases](https://github.com/talhahasanzia/string-resource-utility/releases/tag/v1.0) section.
+`.zip` file contains executables for 64-bit (marked as `amd64`) and 32-bit (marked as `386`) versions. `arm` is target release for Apple M1 Macbooks. `.exe` for Microsoft Windows.
+
 ## Get Involved
 Feel free to create PRs and report issues or submit feedback. Just remember to be polite and respectful :)
