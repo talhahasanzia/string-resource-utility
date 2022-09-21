@@ -32,19 +32,18 @@ func main() {
 
 	channelMap := make(map[string]chan Record)
 
-	defer func() {
-		// All data sent, setting post text flag to complete the platform specific file formatting
+	// defer func() {
+	// 	// All data sent, setting post text flag to complete the platform specific file formatting
 
-		for i, locale := range data[0] {
-			if i == 0 {
-				continue
-			}
-			// Send empty record to close file with end texts
-			channelMap[locale] <- Record{}
-			close(channelMap[locale])
-		}
+	// 	for i, locale := range data[0] {
+	// 		if i == 0 {
+	// 			continue
+	// 		}
+	// 		// Send empty record to close file with end texts
+	// 		channelMap[locale] <- Record{}
+	// 	}
 
-	}()
+	// }()
 
 	for i, locale := range data[0] {
 		if i == 0 {
@@ -64,7 +63,13 @@ func main() {
 
 	fmt.Println("Writing strings to files... ")
 
-	for _, record := range recordList {
+	for i, record := range recordList {
 		channelMap[record.Locale] <- record
+
+		if i == len(recordList)-1 {
+			for k, _ := range channelMap {
+				CloseFile(*platform, k, *debugFlag)
+			}
+		}
 	}
 }

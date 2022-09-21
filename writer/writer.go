@@ -18,7 +18,6 @@ func WriteFile(platform string, locale string, channel chan Record, debugFlag bo
 	}
 
 	defer file.Close()
-	defer fmt.Printf("\nClosing %s", fileName)
 
 	datawriter := bufio.NewWriter(file)
 
@@ -28,7 +27,7 @@ func WriteFile(platform string, locale string, channel chan Record, debugFlag bo
 	datawriter.Flush()
 
 	if debugFlag {
-		fmt.Printf("\nWritten %s to %s", preText, fileName)
+		fmt.Printf("Written %s to %s\n", preText, fileName)
 	}
 
 	for data := range channel {
@@ -43,18 +42,29 @@ func WriteFile(platform string, locale string, channel chan Record, debugFlag bo
 				fmt.Printf("\nWritten %s to %s", formatted, fileName)
 			}
 
-		} else {
-
-			postText := getPosttext(platform)
-			datawriter.WriteString(postText)
-			datawriter.Flush()
-			if debugFlag && postText != "" {
-				fmt.Printf("\nWritten %s to %s", postText, fileName)
-			}
-
 		}
 	}
+}
 
+func CloseFile(platform string, locale string, debugFlag bool) {
+
+	fileName := getFilename(platform, locale)
+	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	if err != nil {
+		log.Fatalf("failed open file: %s", err)
+	}
+
+	defer file.Close()
+
+	datawriter := bufio.NewWriter(file)
+
+	postText := getPosttext(platform)
+	datawriter.WriteString(postText)
+	datawriter.Flush()
+	if debugFlag && postText != "" {
+		fmt.Printf("\nWritten %s to %s", postText, fileName)
+	}
 }
 
 func getFormattedEntry(platform string, key string, value string) string {
