@@ -8,10 +8,10 @@ import (
 	"os"
 )
 
-func WriteFile(platform string, locale string, base string, channel chan Record, output string, debugFlag bool, overwrite bool) {
+func WriteFile(platform string, locale string, channel chan Record, output string, debugFlag bool, overwrite bool) {
 
-	fileName := getFilename(platform, locale, base, output)
-	dirName := getDirname(platform, locale, base, output)
+	fileName := getFilename(platform, locale, output)
+	dirName := getDirname(platform, locale, output)
 
 	os.MkdirAll(dirName, os.ModePerm)
 
@@ -54,9 +54,9 @@ func WriteFile(platform string, locale string, base string, channel chan Record,
 	}
 }
 
-func CloseFile(platform string, locale string, base string, output string, debugFlag bool) {
+func CloseFile(platform string, locale string, output string, debugFlag bool) {
 
-	fileName := getFilename(platform, locale, base, output)
+	fileName := getFilename(platform, locale, output)
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
@@ -85,34 +85,22 @@ func getFormattedEntry(platform string, key string, value string) string {
 	}
 }
 
-func getFilename(platform string, locale string, base string, output string) string {
-	dir := getDirname(platform, locale, base, output)
+func getFilename(platform string, locale string, output string) string {
+	dir := getDirname(platform, locale, output)
 	if platform == "ios" {
-		return dir + "/Localizable.strings"
+		return dir + "/Localized.strings"
 	} else if platform == "android" {
 		return dir + "/strings.xml"
 	} else {
-		if locale == base {
-			return dir + "/strings.ts"
-		} else {
-			return dir + "/strings_" + locale + ".ts"
-		}
+		return dir + "/strings_" + locale + ".ts"
 	}
 }
 
-func getDirname(platform string, locale string, base string, output string) string {
+func getDirname(platform string, locale string, output string) string {
 	if platform == "ios" {
-		if locale == base {
-			return output + "/base.lproj"
-		} else {
-			return output + "/" + locale + ".lproj"
-		}
+		return output + "/" + locale + ".lproj"
 	} else if platform == "android" {
-		if locale == base {
-			return output + "/values"
-		} else {
-			return output + "/values-" + locale
-		}
+		return output + "/values-" + locale
 	} else {
 		return output
 	}
