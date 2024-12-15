@@ -8,9 +8,13 @@ import (
 	"os"
 )
 
-func WriteFile(platform string, locale string, channel chan Record, debugFlag bool) {
+func WriteFile(platform string, locale string, channel chan Record, output string, debugFlag bool, overwrite bool) {
 
-	fileName := getFilename(platform, locale)
+	fileName := getFilename(platform, locale, output)
+	dirName := getDirname(platform, locale, output)
+
+	os.MkdirAll(dirName, os.ModePerm)
+
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
@@ -18,6 +22,10 @@ func WriteFile(platform string, locale string, channel chan Record, debugFlag bo
 	}
 
 	defer file.Close()
+
+	if overwrite {
+		file.Truncate(0)
+	}
 
 	datawriter := bufio.NewWriter(file)
 
@@ -46,9 +54,9 @@ func WriteFile(platform string, locale string, channel chan Record, debugFlag bo
 	}
 }
 
-func CloseFile(platform string, locale string, debugFlag bool) {
+func CloseFile(platform string, locale string, output string, debugFlag bool) {
 
-	fileName := getFilename(platform, locale)
+	fileName := getFilename(platform, locale, output)
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
@@ -77,13 +85,22 @@ func getFormattedEntry(platform string, key string, value string) string {
 	}
 }
 
-func getFilename(platform string, locale string) string {
+func getFilename(platform string, locale string, output string) string {
+	dir := getDirname(platform, locale, output)
 	if platform == "ios" {
-		return "Localized_" + locale + ".strings"
+		return dir + "/Localized_" + locale + ".strings"
 	} else if platform == "android" {
-		return "strings_" + locale + ".xml"
+		return dir + "/strings.xml"
 	} else {
-		return "strings_" + locale + ".ts"
+		return dir + "/strings_" + locale + ".ts"
+	}
+}
+
+func getDirname(platform string, locale string, output string) string {
+	if platform == "android" {
+		return output + "/values-" + locale
+	} else {
+		return output
 	}
 }
 
