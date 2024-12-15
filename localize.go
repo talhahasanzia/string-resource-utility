@@ -15,6 +15,8 @@ func main() {
 
 	platform := flag.String("platform", "", "target platform: ios/android/web")
 
+	base := flag.String("base", "en", "base locale")
+
 	output := flag.String("output", "./", "output directory for generated files")
 
 	debugFlag := flag.Bool("debug", false, "enable detailed logs for debugging: true/false")
@@ -48,7 +50,7 @@ func main() {
 			continue
 		}
 
-		go WriteFile(*platform, locale, channelMap[locale], *output, *debugFlag, *overwrite)
+		go WriteFile(*platform, locale, *base, channelMap[locale], *output, *debugFlag, *overwrite)
 
 	}
 
@@ -58,8 +60,8 @@ func main() {
 		channelMap[record.Locale] <- record
 
 		if i == len(recordList)-1 {
-			for k, _ := range channelMap {
-				CloseFile(*platform, k, *output, *debugFlag)
+			for k := range channelMap {
+				CloseFile(*platform, k, *base, *output, *debugFlag)
 			}
 		}
 	}
