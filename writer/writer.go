@@ -88,7 +88,7 @@ func getFormattedEntry(platform string, key string, value string) string {
 func getFilename(platform string, locale string, output string) string {
 	dir := getDirname(platform, locale, output)
 	if platform == "ios" {
-		return dir + "/Localized.strings"
+		return dir + "/Localizable.strings"
 	} else if platform == "android" {
 		return dir + "/strings.xml"
 	} else {
