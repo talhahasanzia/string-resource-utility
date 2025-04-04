@@ -15,7 +15,11 @@ func main() {
 
 	platform := flag.String("platform", "", "target platform: ios/android/web")
 
+	output := flag.String("output", "./", "output directory for generated files")
+
 	debugFlag := flag.Bool("debug", false, "enable detailed logs for debugging: true/false")
+
+	overwrite := flag.Bool("overwrite", true, "overwrite existing file contents: true/false")
 
 	flag.Parse()
 
@@ -44,7 +48,7 @@ func main() {
 			continue
 		}
 
-		go WriteFile(*platform, locale, channelMap[locale], *debugFlag)
+		go WriteFile(*platform, locale, channelMap[locale], *output, *debugFlag, *overwrite)
 
 	}
 
@@ -55,7 +59,7 @@ func main() {
 
 		if i == len(recordList)-1 {
 			for k, _ := range channelMap {
-				CloseFile(*platform, k, *debugFlag)
+				CloseFile(*platform, k, *output, *debugFlag)
 			}
 		}
 	}

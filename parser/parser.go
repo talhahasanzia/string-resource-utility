@@ -1,6 +1,9 @@
 package parser
 
-import . "localize/record"
+import (
+	. "localize/record"
+	"strings"
+)
 
 func ParseData(data [][]string) []Record {
 
@@ -24,9 +27,9 @@ func ParseData(data [][]string) []Record {
 			if j == 0 {
 				key = field
 			} else {
-				rec.Key = key
+				rec.Key = strings.TrimSpace(key)
 				rec.Value = field
-				rec.Locale = m[j]
+				rec.Locale = strings.TrimSpace(m[j])
 				dataList = append(dataList, rec)
 			}
 
