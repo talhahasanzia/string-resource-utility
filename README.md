@@ -14,7 +14,7 @@ A lot of the times we build applications that spans across countries and regions
 - To build an executable, `go build localize` and you can redistribute.
 
 ## Usage
-- Prepare a csv file with 1st column as key, and subsequent columns as locales e.g.
+- Prepare a csv file with 1st column as key, and subsequent columns as locales e.g. Note: **key** and **locale** will be trimmed.
 
 | key           | en           | es  | it  |
 | ------------- |------------- | ----- | ----- |
@@ -23,9 +23,13 @@ A lot of the times we build applications that spans across countries and regions
 
 - run `./localize -file=<PATH_TO_CSV> -platform=<IOS_ANDROID_WEB> -debug=<TRUE_FALSE>`
 - `-file`: Absolute path to csv file
+- `-output`: output directory for generated files
+- `-overwrite`: overwrite existing file contents: true/false  
 - `-platform`: platform for which string resource will be generated. Options: `ios`,`android` and `web` (anyone at a time).
 - `-debug`: Show logs while creating resources, by default it is `false`. Options: `true` or `false`
 - Currently, it will generate resource files in the same folder where the `localize` command is executed.
+
+
 
 ## Resource files
 ### Android
