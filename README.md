@@ -112,7 +112,7 @@ You can always customize the way this tool work, following are the files where y
 - This sequential approach is simpler to understand and debug while producing the same output as the previous concurrent implementation.
 - Sequential approach also fixes an issue when sometimes, last entry is placed outside closing token.
 
-## Releases
+## Releases [not available for v1.1 see Quick Install above ]
 Find releases for your specific platforms in [releases](https://github.com/talhahasanzia/string-resource-utility/releases/tag/v1.0) section.
 `.zip` file contains executables for 64-bit (marked as `amd64`) and 32-bit (marked as `386`) versions. `arm` is target release for Apple M1 Macbooks. `.exe` for Microsoft Windows.
 
