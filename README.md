@@ -7,7 +7,30 @@ A lot of the times we build applications that spans across countries and regions
 ## Sneak Peek
 ![demo](https://github.com/talhahasanzia/string-resource-utility/blob/main/assets/screen_shots.gif)
 
-## Build
+## Installation
+
+### Quick Install (macOS)
+Run this one-liner to automatically install the `localize` command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/talhahasanzia/string-resource-utility/main/install.sh | bash
+```
+
+Or if you prefer `wget`:
+```bash
+wget -qO- https://raw.githubusercontent.com/talhahasanzia/string-resource-utility/main/install.sh | bash
+```
+
+This will:
+- Clone the repository to a temporary location
+- Build the executable for macOS
+- Install it to `~/.local/bin/localize`
+- Add `~/.local/bin` to your PATH
+- Clean up temporary files
+
+After installation, restart your terminal or run `source ~/.zshrc` (or your shell profile) to use the `localize` command globally.
+
+### Manual Installation
 - Install [Go](https://go.dev). 
 - Goto working directory.
 - To run the utility `go run localize.go -file=strings.csv -platform=ios`
