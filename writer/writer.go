@@ -8,6 +8,52 @@ import (
 	"os"
 )
 
+func WriteFileSequential(platform string, locale string, records []Record, output string, debugFlag bool, overwrite bool) {
+
+	fileName := getFilename(platform, locale, output)
+	dirName := getDirname(platform, locale, output)
+
+	os.MkdirAll(dirName, os.ModePerm)
+
+	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	if err != nil {
+		log.Fatalf("failed creating file: %s", err)
+	}
+
+	defer file.Close()
+
+	if overwrite {
+		file.Truncate(0)
+	}
+
+	datawriter := bufio.NewWriter(file)
+
+	preText := getPretext(platform)
+
+	datawriter.WriteString(preText)
+	datawriter.Flush()
+
+	if debugFlag {
+		fmt.Printf("\nWritten %s to %s\n", preText, fileName)
+	}
+
+	for _, data := range records {
+
+		if data.Key != "" {
+
+			formatted := getFormattedEntry(platform, data.Key, data.Value)
+			datawriter.WriteString(formatted)
+			datawriter.Flush()
+
+			if debugFlag {
+				fmt.Printf("\nWritten %s to %s", formatted, fileName)
+			}
+
+		}
+	}
+}
+
 func WriteFile(platform string, locale string, channel chan Record, output string, debugFlag bool, overwrite bool) {
 
 	fileName := getFilename(platform, locale, output)
@@ -135,7 +181,7 @@ func getPosttext(platform string) string {
 	case "android":
 		return "</resources>"
 	case "flutter":
-		return "}\n"
+		return "\"eof\":\"eof\"\n}\n"
 	default:
 		return "}\n\nexport default LOCALIZED_STRINGS;"
 	}

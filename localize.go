@@ -34,33 +34,25 @@ func main() {
 
 	recordList := ParseData(data)
 
-	channelMap := make(map[string]chan Record)
-
-	for i, locale := range data[0] {
-		if i == 0 {
-			continue
-		}
-		channelMap[locale] = make(chan Record)
+	// Group records by locale
+	localeRecords := make(map[string][]Record)
+	for _, record := range recordList {
+		localeRecords[record.Locale] = append(localeRecords[record.Locale], record)
 	}
 
-	for i, locale := range data[0] {
-		if i == 0 {
-			continue
-		}
-
-		go WriteFile(*platform, locale, channelMap[locale], *output, *debugFlag, *overwrite)
-
+	// Calculate unique keys
+	uniqueKeys := make(map[string]bool)
+	for _, record := range recordList {
+		uniqueKeys[record.Key] = true
 	}
 
-	fmt.Println("Writing strings to files... ")
+	fmt.Printf("CSV parsed successfully. Found %d unique keys across %d locales (%d total records).\n", len(uniqueKeys), len(localeRecords), len(recordList))
 
-	for i, record := range recordList {
-		channelMap[record.Locale] <- record
+	fmt.Printf("Writing strings to files for %d locales...\n", len(localeRecords))
 
-		if i == len(recordList)-1 {
-			for k, _ := range channelMap {
-				CloseFile(*platform, k, *output, *debugFlag)
-			}
-		}
+	// Write files sequentially for each locale
+	for locale, records := range localeRecords {
+		WriteFileSequential(*platform, locale, records, *output, *debugFlag, *overwrite)
+		CloseFile(*platform, locale, *output, *debugFlag)
 	}
 }

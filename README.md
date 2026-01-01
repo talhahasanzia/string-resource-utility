@@ -50,6 +50,18 @@ Similarly, if you chose `-platfrom=ios`, the generated files will be `Localized.
 "bye_text" = "goodbye";
 ```
 
+### Flutter (arb files only)
+Similarly, if you chose `-platfrom=flutter`, the generated files will be `app_<en>.arb`, since we are targeting multiple locales, this tool will generate `app_en.arb` for `en` locale, and so on. Here is what this generated file looks like when above mentioned csv is used:
+```
+{
+"welcome_text": "welcome",
+"bye_text": "goodbye",
+"eof":"eof"
+}
+```
+
+Note that a dummy entry as "eof" is set in the end of arb file in order to mitigate error resulting from last left comma (*,*) when `flutter gen-l10n` is run.
+
 ### Web
 And finally, if you chose `-platfrom=web` (assuming you are working on a typescript framework), the generated files will be `strings.ts`, since we are targeting multiple locales, this tool will generate `strings_en.ts` for `en` locale, and so on. Here is what this generated file looks like when above mentioned csv is used:
 ```
