@@ -76,52 +76,67 @@ func CloseFile(platform string, locale string, output string, debugFlag bool) {
 }
 
 func getFormattedEntry(platform string, key string, value string) string {
-	if platform == "ios" {
+	switch platform {
+	case "ios":
 		return "\"" + key + "\" =" + " \"" + value + "\";\n"
-	} else if platform == "android" {
+	case "android":
 		return "<string name=\"" + key + "\">" + value + "</string>\n"
-	} else {
+	case "flutter":
+		return "\"" + key + "\": \"" + value + "\",\n"
+	default:
 		return key + ": \"" + value + "\",\n"
 	}
 }
 
 func getFilename(platform string, locale string, output string) string {
 	dir := getDirname(platform, locale, output)
-	if platform == "ios" {
+	switch platform {
+	case "ios":
 		return dir + "/Localizable.strings"
-	} else if platform == "android" {
+	case "android":
 		return dir + "/strings.xml"
-	} else {
+	case "flutter":
+		return dir + "/app_" + locale + ".arb"
+	default:
 		return dir + "/strings_" + locale + ".ts"
 	}
 }
 
 func getDirname(platform string, locale string, output string) string {
-	if platform == "ios" {
+	switch platform {
+	case "ios":
 		return output + "/" + locale + ".lproj"
-	} else if platform == "android" {
+	case "android":
 		return output + "/values-" + locale
-	} else {
+	case "flutter":
+		return output + "/l10n"
+	default:
 		return output
 	}
 }
 
 func getPretext(platform string) string {
-	if platform == "ios" {
+	switch platform {
+	case "ios":
 		return ""
-	} else if platform == "android" {
+	case "android":
 		return "<resources>\n"
-	} else {
+	case "flutter":
+		return "{\n"
+	default:
 		return "const LOCALIZED_STRINGS = {\n"
 	}
 }
 
 func getPosttext(platform string) string {
-	if platform == "ios" {
+	switch platform {
+	case "ios":
 		return ""
-	} else if platform == "android" {
+	case "android":
 		return "</resources>"
-	} else {
+	case "flutter":
+		return "}\n"
+	default:
 		return "}\n\nexport default LOCALIZED_STRINGS;"
 	}
 }

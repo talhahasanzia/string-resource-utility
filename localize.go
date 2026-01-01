@@ -13,7 +13,7 @@ func main() {
 
 	csvFile := flag.String("file", "", "csv file name with absolute path")
 
-	platform := flag.String("platform", "", "target platform: ios/android/web")
+	platform := flag.String("platform", "", "target platform: ios/android/web/flutter")
 
 	output := flag.String("output", "./", "output directory for generated files")
 
