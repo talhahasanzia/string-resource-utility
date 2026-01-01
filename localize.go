@@ -9,6 +9,8 @@ import (
 	. "localize/writer"
 )
 
+const version = "v1.1"
+
 func main() {
 
 	csvFile := flag.String("file", "", "csv file name with absolute path")
@@ -21,7 +23,14 @@ func main() {
 
 	overwrite := flag.Bool("overwrite", true, "overwrite existing file contents: true/false")
 
+	versionFlag := flag.Bool("v", false, "print version information")
+
 	flag.Parse()
+
+	if *versionFlag {
+		fmt.Printf("localize version %s\n", version)
+		return
+	}
 
 	if *csvFile == "" {
 		fmt.Println("Invalid input for file name/path.")
