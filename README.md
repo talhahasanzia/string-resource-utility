@@ -80,14 +80,14 @@ You can always customize the way this tool work, following are the files where y
 - `writer.go`: Writes to file for each `Record` entry, and also responsible for opening and closing data specific to platform.
 
 ### Explanation
-- Once the data is ready to be written in the form of list (slice) of `Record`, the code creates separate channels for each locale.
-- This helps writing in separate files asynchronously. So for 3 locales, 3 channels will be created, with 3 goroutines.
-- Once goroutines are started, they know the platform and locale, so the code creates platform + locale specific files, and populate some pretext if needed by that specific platform.
-- Then the writer waits for the entry via channel that was passed to it at the time of execution of goroutine.
-- A loop is started to iterate over all entries in `Record` list, calling locale specific channel to send entry to be written. 
-- This is acheived by creating a map, where locale is key, and channel instance is value. So calling `channelMap[locale]` will tell us where to write.
-- Since channel instance is locale specific and goroutine is also locale specifice, an entry sent to `en` channel will be received by a goroutine that was started for `en` writing, since goroutine is receiving on this channel, entry is written.
-- In the end, when loop is completing, `CloseFile` calls are made which writes closing statement (if needed by platform) to platform + locale specific file.
+- Once the data is ready to be written in the form of list (slice) of `Record`, the code groups records by locale.
+- Each locale's records are processed sequentially, writing all entries for one locale before moving to the next.
+- For each locale, the code creates platform + locale specific files and populates some pretext if needed by that specific platform.
+- The writer processes all records for the current locale in a simple loop, writing each entry to the appropriate file.
+- This is achieved by grouping records using a map where locale is the key and a slice of records is the value. So `localeRecords[locale]` contains all entries for that locale.
+- After all records for a locale are written, `CloseFile` is called which writes the closing statement (if needed by platform) to the platform + locale specific file.
+- This sequential approach is simpler to understand and debug while producing the same output as the previous concurrent implementation.
+- Sequential approach also fixes an issue when sometimes, last entry is placed outside closing token.
 
 ## Releases
 Find releases for your specific platforms in [releases](https://github.com/talhahasanzia/string-resource-utility/releases/tag/v1.0) section.
