@@ -15,3 +15,8 @@
 # vendor/
 localize
 /.idea
+/ar.lproj
+en.lproj/Localizable.strings
+strings_ar.ts
+values-ar/strings.xml
+values-en/strings.xml
